@@ -9,64 +9,33 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
   <style>
-    :root {
-      --tg-bg: #17212b;
-      --tg-sec: #232e39;
-      --tg-blue: #2481cc;
-      --tg-text: #fff;
-      --tg-muted: #8696a8;
-    }
+    :root { --tg-bg:#17212b; --tg-sec:#232e39; --tg-blue:#2481cc; --tg-text:#fff; --tg-muted:#8696a8; }
     * { margin:0; padding:0; box-sizing:border-box; }
     body { height:100vh; background:#000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow:hidden; }
     #authScreen, #app { width:100%; height:100%; display:flex; }
     #authScreen { background: linear-gradient(135deg, #667eea, #764ba2); align-items:center; justify-content:center; color:white; }
-    .auth-box {
-      background:rgba(255,255,255,0.1); backdrop-filter:blur(10px); padding:40px; border-radius:20px; width:380px; text-align:center; box-shadow:0 20px 40px rgba(0,0,0,0.3);
-    }
+    .auth-box { background:rgba(255,255,255,0.1); backdrop-filter:blur(10px); padding:40px; border-radius:20px; width:380px; text-align:center; box-shadow:0 20px 40px rgba(0,0,0,0.3); }
     .auth-box h1 { font-size:32px; margin-bottom:10px; }
-    .auth-box h1::before { content:"🐱 "; }
-    .auth-box input, .auth-box select {
-      width:100%; padding:14px; margin:12px 0; border:none; border-radius:12px; background:rgba(255,255,255,0.2); color:white; font-size:16px;
-    }
+    .auth-box h1::before { content:"Cat "; }
+    .auth-box input, .auth-box select { width:100%; padding:14px; margin:12px 0; border:none; border-radius:12px; background:rgba(255,255,255,0.2); color:white; font-size:16px; }
     .auth-box input::placeholder { color:#ddd; }
-    .auth-box button {
-      width:100%; padding:14px; background:#fff; color:#764ba2; border:none; border-radius:12px; font-size:18px; font-weight:bold; cursor:pointer; margin-top:20px;
-    }
-    .error { color: #ff6b6b; margin-top:10px; font-size:14px; }
+    .auth-box button { width:100%; padding:14px; background:#fff; color:#764ba2; border:none; border-radius:12px; font-size:18px; font-weight:bold; cursor:pointer; margin-top:20px; }
+    .error { color:#ff6b6b; margin-top:10px; font-size:14px; }
     #app { display:none; background:var(--tg-bg); color:var(--tg-text); }
     #sidebar { width:320px; background:var(--tg-sec); border-right:1px solid #2b5278; display:flex; flex-direction:column; }
     .header { height:65px; background:var(--tg-blue); padding:0 20px; display:flex; align-items:center; font-size:20px; font-weight:600; }
-    .header::before { content:"🐱 "; }
-    #chatList { flex:1; overflow-y:auto; }
-    .chat-item {
-      padding:14px 16px; display:flex; align-items:center; cursor:pointer; transition:0.2s;
-    }
-    .chat-item:hover { background:#2b5278; }
-    .chat-item.active { background:#2c5278; }
-    .avatar {
-      width:50px; height:50px; border-radius:50%; background:#ff6b6b; display:flex; align-items:center; justify-content:center; font-size:24px; margin-right:12px;
-    }
-    .chat-name { font-weight:600; }
-    .preview { font-size:13px; color:var(--tg-muted); margin-top:4px; }
+    .header::before { content:"Cat "; }
     #main { flex:1; display:flex; flex-direction:column; background:#0e1621; }
     #chatHeader { height:65px; background:var(--tg-sec); padding:0 20px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #2b3744; }
-    #messages { flex:1; overflow-y:auto; padding:20px; }
-    .message {
-      max-width:70%; margin-bottom:16px; padding:10px 14px; border-radius:12px; position:relative; word-wrap:break-word;
-    }
+    #messages { flex:1; overflow-y:auto; padding:20px; background:#0e1621; }
+    .message { max-width:70%; margin-bottom:16px; padding:10px 14px; border-radius:12px; word-wrap:break-word; }
     .message.mine { background:var(--tg-blue); color:white; margin-left:auto; border-bottom-right-radius:4px; }
     .message.other { background:#2b3744; color:white; border-bottom-left-radius:4px; }
     .message .name { font-size:12px; opacity:0.8; margin-bottom:4px; }
     .message .time { font-size:11px; opacity:0.7; text-align:right; margin-top:4px; }
-    #inputArea {
-      padding:12px; background:var(--tg-sec); display:flex; gap:10px;
-    }
-    #inputArea input {
-      flex:1; padding:12px 18px; background:#2e3a46; border:none; border-radius:20px; color:white; font-size:15px;
-    }
-    #inputArea button {
-      width:46px; height:46px; background:var(--tg-blue); border:none; border-radius:50%; color:white; font-size:20px; cursor:pointer;
-    }
+    #inputArea { padding:12px; background:var(--tg-sec); display:flex; gap:10px; }
+    #inputArea input { flex:1; padding:12px 18px; background:#2e3a46; border:none; border-radius:20px; color:white; font-size:15px; }
+    #inputArea button { width:46px; height:46px; background:var(--tg-blue); border:none; border-radius:50%; color:white; font-size:20px; cursor:pointer; }
   </style>
 </head>
 <body>
@@ -75,21 +44,19 @@
 <div id="authScreen">
   <div class="auth-box">
     <h1>KoshpaGram</h1>
-    <p>Вход или регистрация (для теста: +79161234567 / 123456)</p>
-    
-    <input type="text" id="phone" placeholder="Номер телефона (+7916...)" maxlength="16">
-    <input type="text" id="name" placeholder="Твоё имя">
-    <input type="date" id="birthdate" placeholder="Дата рождения">
-    <input type="password" id="password" placeholder="Пароль (минимум 6 символов)">
+    <p>Вход или регистрация</p>
+    <input type="text" id="phone" placeholder="Номер телефона (+7916...)" value="+79161234567">
+    <input type="text" id="name" placeholder="Твоё имя" value="Бебрик">
+    <input type="date" id="birthdate" value="2016-04-08">
+    <input type="password" id="password" placeholder="Пароль (минимум 6 символов)" value="123456">
     <select id="avatar">
-      <option value="🐱">Котик</option>
-      <option value="😺">Улыбающийся кот</option>
-      <option value="🐈">Чёрный кот</option>
-      <option value="🐾">Лапки</option>
-      <option value="🦁">Лев</option>
-      <option value="🐯">Тигр</option>
+      <option value="Cat">Котик</option>
+      <option value="Grinning Cat">Улыбающийся кот</option>
+      <option value="Black Cat">Чёрный кот</option>
+      <option value="Paw">Лапки</option>
+      <option value="Lion">Лев</option>
+      <option value="Tiger">Тигр</option>
     </select>
-    
     <button onclick="loginOrRegister()">Войти в KoshpaGram</button>
     <div id="errorMsg" class="error" style="display:none;"></div>
   </div>
@@ -99,45 +66,36 @@
 <div id="app">
   <div id="sidebar">
     <div class="header">KoshpaGram</div>
-    <div id="chatList">
-      <div class="chat-item active" onclick="openChat('global')">
-        <div class="avatar">🐱</div>
-        <div>
-          <div class="chat-name">Общий кошачий чат</div>
-          <div class="preview">мяяяв, кто-то написал...</div>
-        </div>
-      </div>
-    </div>
+    <div style="padding:20px; color:#aaa; text-align:center;">Общий чат (пока только он)</div>
   </div>
-
   <div id="main">
     <div id="chatHeader">
-      <div class="avatar" id="chatAvatar">🐱</div>
+      <div style="width:50px;height:50px;border-radius:50%;background:#ff6b6b;display:flex;align-items:center;justify-content:center;font-size:28px;">Cat</div>
       <div>
-        <div class="chat-name">Общий кошачий чат</div>
-        <div style="color:#4fad66; font-size:13px;">много котиков онлайн</div>
+        <div style="font-weight:600;">Общий кошачий чат</div>
+        <div style="color:#4fad66;font-size:13px;">много котиков онлайн</div>
       </div>
     </div>
     <div id="messages"></div>
     <div id="inputArea">
       <input type="text" id="messageInput" placeholder="Напишите сообщение...">
-      <button onclick="sendMessage()">➦</button>
+      <button onclick="sendMessage()">Send</button>
     </div>
   </div>
 </div>
 
 <script>
-  // ←←←←←←←←←←←←←←←←← ВСТАВЬ СВОЙ КОНФИГ FIREBASE ЗДЕСЬ ←←←←←←←←←←←←←←←←←
+  // ←←←←←←←←←←←←← ТВОЙ РАБОЧИЙ КОНФИГ ←←←←←←←←←←←←←
   const firebaseConfig = {
-    apiKey: "AIzaSyBxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    apiKey: "AIzaSyDvRKmyltuxYuvmGPWr7Agu_ExLr8OudrY",
     authDomain: "koshpagram.firebaseapp.com",
-    databaseURL: "https://koshpagram-default-rtdb.europe-west1.firebasedatabase.app",
+    databaseURL: "https://koshpagram-default-rtdb.firebaseio.com",
     projectId: "koshpagram",
-    storageBucket: "koshpagram.appspot.com",
-    messagingSenderId: "1234567890",
-    appId: "1:1234567890:web:abcdef1234567890"
+    storageBucket: "koshpagram.firebasestorage.app",
+    messagingSenderId: "631435567718",
+    appId: "1:631435567718:web:c2d71024479a93c40983a7"
   };
-  // ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
+  // ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
 
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
@@ -145,154 +103,80 @@
 
   let currentUser = null;
 
-  // Функция нормализации номера
-  function normalizePhone(phone) {
-    return phone.replace(/[\s\-\(\)]/g, ''); // Убираем пробелы, дефисы, скобки
-  }
+  function normalizePhone(p) { return p.replace(/[\s\-\(\)]/g,''); }
 
-  // Регистрация или вход
   function loginOrRegister() {
     const phoneRaw = document.getElementById('phone').value.trim();
-    const name = document.getElementById('name').value.trim();
+    const name = document.getElementById('name').value.trim() || 'Котик';
     const birthdate = document.getElementById('birthdate').value;
     const password = document.getElementById('password').value;
     const avatar = document.getElementById('avatar').value;
     const errorMsg = document.getElementById('errorMsg');
-
-    // Очистка ошибок
     errorMsg.style.display = 'none';
-    errorMsg.textContent = '';
 
-    // Валидация
-    if (!phoneRaw || !phoneRaw.startsWith('+')) {
-      showError('Номер должен начинаться с + (например: +79161234567)');
-      return;
-    }
+    if (!phoneRaw.startsWith('+') || normalizePhone(phoneRaw).length < 11) return errorMsg.textContent = 'Номер должен быть как +79161234567', errorMsg.style.display = 'block';
+    if (password.length < 6) return errorMsg.textContent = 'Пароль минимум 6 символов', errorMsg.style.display = 'block';
+
     const phone = normalizePhone(phoneRaw);
-    if (phone.length < 10) {
-      showError('Номер слишком короткий! Минимум 10 цифр после +');
-      return;
-    }
-    if (!name) {
-      showError('Введите имя!');
-      return;
-    }
-    if (!birthdate) {
-      showError('Выберите дату рождения!');
-      return;
-    }
-    if (password.length < 6) {
-      showError('Пароль должен быть минимум 6 символов!');
-      return;
-    }
+    const email = phone + '@koshpagram.app';
 
-    const fakeEmail = phone + '@koshpagram.app'; // Изменил домен на .app (лучше работает)
+    auth.signInWithEmailAndPassword(email, password)
+      .then(cred => { currentUser = cred.user; finishLogin(name, avatar); })
+      .catch(() => auth.createUserWithEmailAndPassword(email, password)
+        .then(cred => { currentUser = cred.user; finishLogin(name, avatar); })
+        .catch(err => errorMsg.textContent = err.message, errorMsg.style.display = 'block'));
+  }
 
-    auth.signInWithEmailAndPassword(fakeEmail, password)
-      .then(cred => {
-        currentUser = cred.user;
-        return db.ref('users/' + currentUser.uid).once('value');
-      })
-      .catch(() => { // Если вход не удался — пробуем регистрацию
-        return auth.createUserWithEmailAndPassword(fakeEmail, password)
-          .then(cred => {
-            currentUser = cred.user;
-            return db.ref('users/' + currentUser.uid).set({
-              name, phone, birthdate, avatar, online: true, lastSeen: Date.now()
-            });
-          });
-      })
+  function finishLogin(name, avatar) {
+    db.ref('users/' + currentUser.uid).set({ name, phone: normalizePhone(document.getElementById('phone').value), birthdate: document.getElementById('birthdate').value, avatar, online: true, lastSeen: Date.now() })
       .then(() => {
-        // Сохраняем данные в базу, если ещё не
-        if (!currentUser.displayName) {
-          currentUser.updateProfile({ displayName: name });
-        }
         document.getElementById('authScreen').style.display = 'none';
         document.getElementById('app').style.display = 'flex';
-        document.getElementById('chatAvatar').textContent = avatar;
         loadMessages();
-      })
-      .catch(err => {
-        console.error(err); // Для дебага
-        let message = 'Неизвестная ошибка';
-        switch (err.code) {
-          case 'auth/invalid-email': message = 'Неверный email (проверь номер)'; break;
-          case 'auth/user-not-found': message = 'Пользователь не найден — попробуй другой номер'; break;
-          case 'auth/wrong-password': message = 'Неверный пароль'; break;
-          case 'auth/email-already-in-use': message = 'Аккаунт уже существует — используй этот номер и пароль'; break;
-          case 'auth/weak-password': message = 'Пароль слишком слабый (минимум 6 символов)'; break;
-          case 'auth/network-request-failed': message = 'Проблемы с сетью — проверь интернет'; break;
-          default: message = err.message;
-        }
-        showError(message);
       });
   }
 
-  function showError(msg) {
-    const errorMsg = document.getElementById('errorMsg');
-    errorMsg.textContent = msg;
-    errorMsg.style.display = 'block';
-  }
-
-  // Отправка сообщения
   function sendMessage() {
     const input = document.getElementById('messageInput');
     const text = input.value.trim();
     if (!text || !currentUser) return;
-
     db.ref('global_messages').push({
       uid: currentUser.uid,
-      name: currentUser.displayName || "Котик",
       text: text,
-      avatar: "🐱",
       time: Date.now()
     });
     input.value = '';
   }
 
-  // Загрузка сообщений
   function loadMessages() {
-    db.ref('global_messages').orderByChild('time').limitToLast(100).on('child_added', snap => {
+    db.ref('global_messages').orderByChild('time').limitToLast(200).on('child_added', snap => {
       const msg = snap.val();
-      if (!msg.uid) return;
-
-      db.ref('users/' + msg.uid).once('value').then(userSnap => {
-        const user = userSnap.val() || { name: "Удалённый кот", avatar: "😿" };
-        addMessage({ ...msg, name: user.name, avatar: user.avatar || "🐱" });
+      db.ref('users/' + msg.uid).once('value').then(u => {
+        const user = u.val() || {name:'Удалённый кот', avatar:'Ghost'};
+        addMessage(msg, user);
       });
     });
   }
 
-  function addMessage(msg) {
+  function addMessage(msg, user) {
     const isMine = msg.uid === currentUser.uid;
     const div = document.createElement('div');
-    div.className = `message ${isMine ? 'mine' : 'other'}`;
-    const time = new Date(msg.time).toLocaleTimeString('ru', {hour:'2-digit', minute:'2-digit'});
-
-    div.innerHTML = `
-      ${!isMine ? `<div class="name">${msg.avatar} ${msg.name}</div>` : ''}
-      ${msg.text}
-      <div class="time">${time}</div>
-    `;
+    div.className = `message ${isMine?'mine':'other'}`;
+    const t = new Date(msg.time).toLocaleTimeString('ru', {hour:'2-digit', minute:'2-digit'});
+    div.innerHTML = `${!isMine ? `<div class="name">${user.avatar} ${user.name}</div>` : ''}${msg.text}<div class="time">${t}</div>`;
     document.getElementById('messages').appendChild(div);
-    div.scrollIntoView({behavior: 'smooth'});
+    div.scrollIntoView({behavior:'smooth'});
   }
 
-  // Enter для отправки
-  document.getElementById('messageInput').addEventListener('keypress', e => {
-    if (e.key === 'Enter') sendMessage();
-  });
+  document.getElementById('messageInput').addEventListener('keypress', e => { if(e.key==='Enter') sendMessage(); });
 
-  // Автологин
   auth.onAuthStateChanged(user => {
     if (user && !currentUser) {
       currentUser = user;
       db.ref('users/' + user.uid).once('value').then(snap => {
-        const data = snap.val();
-        if (data) {
+        if (snap.val()) {
           document.getElementById('authScreen').style.display = 'none';
           document.getElementById('app').style.display = 'flex';
-          document.getElementById('chatAvatar').textContent = data.avatar;
           loadMessages();
         }
       });
